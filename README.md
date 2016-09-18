@@ -1,1 +1,3 @@
 # cubegame
+
+Game with cubes
