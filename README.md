@@ -1,3 +1,5 @@
-# cubegame
 
-Game with cubes
+# Cube Game
+
+See if you can beat the cubes
+
