@@ -1,20 +1,27 @@
-var myBody;
-var mySword;
-var myObstacles = [];
-var mouseX = 0;
-var mouseY = 0;
-var frame = 0;
-var xDif = 0;
-var yDif = 0;
-var RandInt = 0;
-var RandInt2 = 0;
-var spawnObst = 0;
-
+let myObstacles = [];
+let mouseX = 0;
+let mouseY = 0;
+let frame = 0;
+let xDif = 0;
+let yDif = 0;
+let RandInt = 0;
+let RandInt2 = 0;
+let GameAreaStopped = false;
 
 function startGame () {
 	myGameArea.start();
+    myObstacles = [];
+    mouseX = 0;
+    mouseY = 0;
+    frame = 0;
+    xDif = 0;
+    yDif = 0;
+    RandInt = 0;
+    RandInt2 = 0;
+    Score = 0;
+    GameAreaStopped = false;
 	myBody = new Component(30,30,"blue",240,120,"Body");
-    mySword= new Component(20,20,"lightblue",240,120,"Sword");
+    mySword = new Component(20,20,"lightblue",240,120,"Sword");
     newObst();
 }
 
@@ -24,24 +31,25 @@ function newObst () {
     switch (RandInt) {
         case 0:
             myObstacles.push(new Component(20,20,"red",490,RandInt2*260,"Obst"));
-            return (true);
+            break;
         case 1:
             myObstacles.push(new Component(20,20,"red",-30,RandInt2*260,"Obst"));
-            return (true);
+            break;
         case 2:
             myObstacles.push(new Component(20,20,"red",RandInt2*480,-30,"Obst"));
-            return (true);
+            break;
         case 3:
             myObstacles.push(new Component(20,20,"red",RandInt2*480,280,"Obst"));
-            return (true);
+            break;
     };
+    console.log("Me.")
 };
 
 var myGameArea = {
 	canvas : document.createElement("canvas"),
 	start : function () {
-		this.canvas.width = 900;
-		this.canvas.height = 900;
+		this.canvas.width = 500;
+		this.canvas.height = 300;
 		this.context = this.canvas.getContext("2d");
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);
@@ -62,6 +70,7 @@ var myGameArea = {
     },
     stop : function() {
         clearInterval(this.interval);
+        GameAreaStopped = true;
     }
 }
 
@@ -84,6 +93,12 @@ function Component (width,height,color,x,y,type) {
     this.LeftcornerName = 0;
     this.WithinMaxPoint = false;
     this.WithinMinPoint = false;
+    if (this.type == "Sword") {
+        this.LengthToTopV = Math.sqrt(35*35 + 100);
+        this.LengthToBotV = Math.sqrt(15*15 + 100);
+        this.TopBonusAngle = Math.atan2(10,35);
+        this.BotBonusAngle = Math.atan2(10,15);
+    } 
     if (this.type == "Obst") { this.speed = 1; xDiff = this.x - myBody.x; yDiff = this.y - myBody.y; this.angle = Math.atan2(xDiff, yDiff) * -1}
     this.update = function() {
         ctx = myGameArea.context;
@@ -102,18 +117,18 @@ function Component (width,height,color,x,y,type) {
         if (this.type == "Sword") {
             this.TBonusAngle = Math.atan2(10,35);
             this.LTAngle = mySword.angle - this.TBonusAngle;
-            this.LTX = Math.cos(this.LTAngle) * (this.height+myBody.height/2) + mySword.x+this.width/2;
-            this.LTY = Math.sin(this.LTAngle) * (this.height+myBody.height/2) + mySword.y+this.width/2;
+            this.LTX = Math.cos(this.LTAngle) * (this.height+myBody.height/2) + mySword.x;
+            this.LTY = Math.sin(this.LTAngle) * (this.height+myBody.height/2) + mySword.y;
             this.RTAngle = mySword.angle + this.TBonusAngle;
-            this.RTX = Math.cos(this.RTAngle) * (this.height+myBody.height/2) + mySword.x+this.width/2;
-            this.RTY = Math.sin(this.RTAngle) * (this.height+myBody.height/2) + mySword.y+this.width/2;
+            this.RTX = Math.cos(this.RTAngle) * (this.height+myBody.height/2) + mySword.x;
+            this.RTY = Math.sin(this.RTAngle) * (this.height+myBody.height/2) + mySword.y;
             this.BBonusAngle = Math.atan2(this.width/2,myBody.width/2);
             this.LBAngle = mySword.angle - this.BBonusAngle;
-            this.LBX = Math.cos(this.LBAngle) * (myBody.height/2) + mySword.x+this.width/2;
-            this.LBY = Math.sin(this.LBAngle) * (myBody.height/2) + mySword.y+this.width/2;
+            this.LBX = Math.cos(this.LBAngle) * (myBody.height/2) + mySword.x;
+            this.LBY = Math.sin(this.LBAngle) * (myBody.height/2) + mySword.y;
             this.RBAngle = mySword.angle + this.BBonusAngle;
-            this.RBX = Math.cos(this.RBAngle) * (myBody.height/2) + mySword.x+this.width/2;
-            this.RBY = Math.sin(this.RBAngle) * (myBody.height/2) + mySword.y+this.width/2;
+            this.RBX = Math.cos(this.RBAngle) * (myBody.height/2) + mySword.x;
+            this.RBY = Math.sin(this.RBAngle) * (myBody.height/2) + mySword.y;
         } else {
             this.LengthToV = Math.sqrt(this.height*this.height/2);
             this.RBAngle = this.angle + Math.PI/4; //done
@@ -128,9 +143,9 @@ function Component (width,height,color,x,y,type) {
             this.LBAngle = this.angle - Math.PI/4; //done
             this.LBX =(this.x) - Math.cos(this.RTAngle) * this.LengthToV;
             this.LBY =(this.y) - Math.sin(this.RTAngle) * this.LengthToV;
-            this.xCorners = [this.RBX, this.LBX, this.RTX, this.LTX];
-            this.yCorners = [this.RBY, this.LBY, this.RTY, this.LTY];
         };
+        this.xCorners = [this.RBX, this.LBX, this.RTX, this.LTX];
+        this.yCorners = [this.RBY, this.LBY, this.RTY, this.LTY];
     };
     this.newPos = function() {
         this.x += this.speed * Math.sin(this.angle);
@@ -144,11 +159,11 @@ function Component (width,height,color,x,y,type) {
             this.xDif = OtherObj.xCorners[p2] - OtherObj.xCorners[p1];
         };
         this.yDif = OtherObj.yCorners[p2] - OtherObj.yCorners[p1];
-        for (i=0;i<myBody.xCorners.length;i++) {
+        for (let i=0;i<this.xCorners.length;i++) {
             if (OtherObj.xCorners[p1] > OtherObj.xCorners[p2]) {
-                this.BodyXDif = OtherObj.xCorners[p1] - myBody.xCorners[i];
+                this.BodyXDif = OtherObj.xCorners[p1] - this.xCorners[i];
             } else {
-                this.BodyXDif = myBody.xCorners[i] - OtherObj.xCorners[p1];
+                this.BodyXDif = this.xCorners[i] - OtherObj.xCorners[p1];
             };
             this.XPercent = this.BodyXDif / this.xDif;
             this.MinY = OtherObj.yCorners[p1] + this.yDif * this.XPercent;
@@ -177,7 +192,7 @@ function Component (width,height,color,x,y,type) {
         this.RightcornerName = 0;
         this.HighcornerName = 0;
         this.LeftcornerName = 0;
-        for (i=0;i<this.xCorners.length;i++) {
+        for (let i=0;i<this.xCorners.length;i++) {
             if (this.yCorners[i] < this.Lowcorner) {
                 this.Lowcorner = this.yCorners[i];
                 this.LowcornerName = i;
@@ -196,21 +211,21 @@ function Component (width,height,color,x,y,type) {
     this.isTouching = function(perpetrator) {
         perpetrator.getCorners();
         if (perpetrator.RightcornerName == perpetrator.LowcornerName || perpetrator.RightcornerName == perpetrator.HighcornerName || perpetrator.LeftcornerName == perpetrator.HighcornerName || perpetrator.LeftcornerName == perpetrator.LowcornerName) {
-            for (z=0;z<myBody.xCorners.length;z++) {
-                if (perpetrator.xCorners[perpetrator.LeftcornerName] < myBody.xCorners[z] && myBody.xCorners[z] < perpetrator.xCorners[perpetrator.RightcornerName] &&
-                    perpetrator.yCorners[perpetrator.LowcornerName] < myBody.yCorners[z] && myBody.yCorners[z] < perpetrator.yCorners[perpetrator.HighcornerName]) {
+            for (let z=0;z<this.xCorners.length;z++) {
+                if (perpetrator.xCorners[perpetrator.LeftcornerName] < this.xCorners[z] && this.xCorners[z] < perpetrator.xCorners[perpetrator.RightcornerName] &&
+                    perpetrator.yCorners[perpetrator.LowcornerName] < this.yCorners[z] && this.yCorners[z] < perpetrator.yCorners[perpetrator.HighcornerName]) {
                     return true;
                 }
             }
             return false;
         }
-        if (myBody.isBelowPoints(perpetrator,perpetrator.LeftcornerName,perpetrator.HighcornerName,"Oro") == false) {
+        if (this.isBelowPoints(perpetrator, perpetrator.LeftcornerName, perpetrator.HighcornerName,"Oro") == false) {
             return false;
-        } if (myBody.isBelowPoints(perpetrator,perpetrator.LowcornerName,perpetrator.RightcornerName) == false) {
+        } if (this.isBelowPoints(perpetrator, perpetrator.LowcornerName, perpetrator.RightcornerName) == false) {
             return false;
-        } if (myBody.isBelowPoints(perpetrator,perpetrator.RightcornerName,perpetrator.HighcornerName,"Oro") == false) {
+        } if (this.isBelowPoints(perpetrator, perpetrator.RightcornerName, perpetrator.HighcornerName,"Oro") == false) {
             return false;
-        } if (myBody.isBelowPoints(perpetrator,perpetrator.LowcornerName,perpetrator.LeftcornerName) == false) {
+        } if (this.isBelowPoints(perpetrator, perpetrator.LowcornerName, perpetrator.LeftcornerName) == false) {
             return false;
         }
         return true;
@@ -219,35 +234,43 @@ function Component (width,height,color,x,y,type) {
 
 function updateGameArea() {
     frame += 1;
-    spawnObst += 1;
-    if (spawnObst == 100) {
-        newObst();
-        spawnObst = 0;
-    } if (myGameArea.keys && myGameArea.keys[37]) {
+    if (myGameArea.keys && myGameArea.keys[37]) {
         myBody.angle -= Math.PI / 90;
         mySword.angle -= Math.PI / 90;
     }; if (myGameArea.keys && myGameArea.keys[39]) {
         myBody.angle += Math.PI / 90;
         mySword.angle += Math.PI / 90;
     };
-    myGameArea.clear(); 
-    mySword.newPos();
-    mySword.update();
+    myGameArea.clear();
     myBody.newPos();
     myBody.update();
-    for (i=0;i<myObstacles.length;i++) {
+    mySword.newPos();
+    mySword.update();
+    for (let i=0;i<myObstacles.length;i++) {
         myObstacles[i].newPos();
         myObstacles[i].update();
     };
-    document.getElementById("testing2").innerHTML = "."
-    document.getElementById("testing3").innerHTML = "."
-    console.log(frame);
-    for (z=0;z<myObstacles.length;z++) {
-        
-        if (myBody.isTouching(myObstacles[z])) {
-            console.log("Triggered");
-            
+    for (pff=0; pff<myObstacles.length;pff++) {
+        if (mySword.isTouching(myObstacles[pff])) {
+            myObstacles.splice(pff,1);
         }
+        if (myBody.isTouching(myObstacles[pff])) {
+            myGameArea.stop();
+            document.getElementById("RIP").innerHTML = "You Lose";
+        }
+        
     };
-    document.getElementById("testing1").innerHTML = "Mouse: (" + (mouseX) + ", " + (mouseY) + ")";
+    console.log(frame);
+    if (frame % 100 == 0) {
+        newObst();
+        console.log("Spawns:")
+    };
+    document.getElementById("Score").innerHTML = frame;
+};
+ 
+function restart() {
+    myGameArea.clear();
+    if (GameAreaStopped == false) {myGameArea.stop()};
+    startGame();
+    document.getElementById("RIP").innerHTML = "";
 };
