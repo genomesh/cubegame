@@ -1,3 +1,4 @@
 # cubegame
 
-Game with cubes
+Defend the Pentagon
+
