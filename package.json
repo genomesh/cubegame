@@ -1,0 +1,19 @@
+{
+  "name": "cubegame",
+  "version": "0.1.0",
+  "description": "Simple Geometric Game",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genomesh/cubegame.git"
+  },
+  "author": "Dragon",
+  "license": "ISC",
+  "homepage": "https://github.com/genomesh/cubegame#readme"
+}
