@@ -115,16 +115,16 @@ function spawnObstacle () {
     RandInt2 = Math.random();
     switch (RandInt) {
         case 0:
-            myObstacles.push(new Component(myCanvas.canvas.width - 20,RandInt2*myCanvas.canvas.height,"red","Obst"));
+            myObstacles.push(new Component(myCanvas.canvas.width + 20,RandInt2*myCanvas.canvas.height,"red","Obst"));
             break;
         case 1:
-            myObstacles.push(new Component(+20,RandInt2*myCanvas.canvas.height,"red","Obst"));
+            myObstacles.push(new Component(-20,RandInt2*myCanvas.canvas.height,"red","Obst"));
             break;
         case 2:
-            myObstacles.push(new Component(RandInt2*myCanvas.canvas.width,+20,"red","Obst"));
+            myObstacles.push(new Component(RandInt2*myCanvas.canvas.width,-20,"red","Obst"));
             break;
         case 3:
-            myObstacles.push(new Component(RandInt2*myCanvas.canvas.width,myCanvas.canvas.height-20,"red","Obst"));
+            myObstacles.push(new Component(RandInt2*myCanvas.canvas.width,myCanvas.canvas.height+20,"red","Obst"));
             break;
     };
     myObstacles[myObstacles.length-1].pointInDirection(myBody);
@@ -273,11 +273,17 @@ function restart() {
     GameAreaStopped = false;
 };
 
+let Level = 0;
+
+function levelDown () {if (Level > 0) { Level -= 1; } }
+function levelUp () {if (Level < 9) { Level += 1; } }
+
 function ChangeTheAngle () {
-    if (spawnObstacleCounter % 35 == 0) { spawnObstacle(); console.log(spawnObstacleCounter); }
+    if (spawnObstacleCounter % (100 - 10*Level) == 0) { spawnObstacle(); }
     spawnObstacleCounter += 1;
     document.getElementById("Score").innerHTML = "Score: " + spawnObstacleCounter;
     document.getElementById("Kills").innerHTML = "Kills: " + kills;
+    document.getElementById("Level").innerHTML = "Level: " + Level;
     if (myCanvas.keys && myCanvas.keys[65]) {
         myBody.x -= 2;
         mySword.x -= 2;
@@ -302,18 +308,23 @@ function ChangeTheAngle () {
     mySword.updateCorners();
     myBody.update();
     mySword.update();
-    for (let o = 0; 0 < myObstacles.length; o++) {
+    for (let o = 0; o < myObstacles.length; o++) {
         if (myObstacles[o].isTouching(myBody)) {
             myCanvas.stop();
         }
         if (myObstacles[o].isTouching(mySword)) {
             myObstacles.splice(o,1);
+            o -= 1;
             kills += 1;
+        } else {
+            myObstacles[o].pointInDirection(myBody);
+            myObstacles[o].x += Math.sin(myObstacles[o].angle);
+            myObstacles[o].y -= Math.cos(myObstacles[o].angle);
+            myObstacles[o].updateCorners();
+            myObstacles[o].update();
         }
-        myObstacles[o].pointInDirection(myBody);
-        myObstacles[o].x += Math.sin(myObstacles[o].angle);
-        myObstacles[o].y -= Math.cos(myObstacles[o].angle);
-        myObstacles[o].updateCorners();
-        myObstacles[o].update();
+    }
+    if (myBody.x > 675 || myBody.x < -225 || myBody.y > 675 || myBody.y < -225) {
+        myCanvas.stop();
     }
 }
