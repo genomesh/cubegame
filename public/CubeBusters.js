@@ -110,6 +110,7 @@ function createObstacle () {
     myObstacles[myObstacles.length-1].updateCorners();
 }
 
+
 function spawnObstacle () {
     RandInt = Math.floor(Math.random()*4);
     RandInt2 = Math.random();
@@ -216,19 +217,12 @@ function Corner (xDifAt0,yDifAt0,AngleIfCheck) {
 
 myBody = new Component(225,225,"lightblue");
 mySword = new Component(225,225,"blue");
+
 let myObstacles = [];
 
 GameAreaStopped = false;
 
 myBody.LengthFromCentre = 30;
-
-myBody.angle = 0;
-mySword.angle = 0;
-
-Obj1 = new Component(50,50,"red");
-Obj2 = new Component(100,50,"red");
-Obj3 = new Component(50,100,"red");
-Obj4 = new Component(100,100,"red");
 
 myBody.AddCorner(Math.cos(Math.PI/10)*-myBody.LengthFromCentre,Math.sin(Math.PI/10)*-myBody.LengthFromCentre,"Bot");
 myBody.AddCorner(0,-myBody.LengthFromCentre,"Bot");
@@ -248,29 +242,62 @@ mySword.AddCorner(8,Math.sin(Math.PI*3/10)*myBody.LengthFromCentre,"Top");
 
 let spawnObstacleCounter = 0;
 let kills = 0;
-
-myBody.updateCorners();
-mySword.updateCorners();
-
-myCanvas.start();
-
-myBody.update();
-mySword.update();
-
-function restart() {
-    myCanvas.clear();
-    if (GameAreaStopped == false) {myGameArea.stop()};
+startGame = function () {
     myBody.x = 225;
     myBody.y = 225;
     mySword.y = 225;
     mySword.x = 225;
     myBody.angle = 0;
     mySword.angle = 0;
-    myCanvas.start();
     myObstacles = [];
     spawnObstacleCounter = 0;
     kills = 0;
     GameAreaStopped = false;
+    myBody.updateCorners();
+    mySword.updateCorners();
+
+    myCanvas.start();
+    
+    instructionsDisplayed = false;
+    
+    myBody.update();
+    mySword.update();
+}
+
+toggleInstructions = function () {
+    console.log("yo");
+    if (instructionsDisplayed == false) {
+        drawInstructions();
+        instructionsDisplayed = true;
+    } else {
+        removeInstructions();
+        instructionsDisplayed = false;
+    }
+}
+drawInstructions = function () {
+    if (GameAreaStopped == true) { startGame(); }
+    let ctx = myCanvas.context;
+    let image = document.getElementById("image");
+    ctx.drawImage(image,0,0,450,450);
+    console.log("hi");
+    GameAreaStopped = true;
+    myCanvas.stop();
+}
+
+let instructionsDisplayed = false;
+
+removeInstructions = function () {
+    restart();
+}
+
+stopGame = function () {
+    myCanvas.clear();
+    if (GameAreaStopped == false) {myCanvas.stop()};
+}
+
+function restart() {
+    stopGame();
+    startGame();
 };
 
 let Level = 0;
@@ -326,5 +353,25 @@ function ChangeTheAngle () {
     }
     if (myBody.x > 675 || myBody.x < -225 || myBody.y > 675 || myBody.y < -225) {
         myCanvas.stop();
+        GameAreaStopped = true;
     }
 }
+/*
+<html>
+    <head>
+    </head>
+    <body>
+        <canvas id = "canvas" width="500" height="500"></canvas>
+        <div style="display:none;">
+        <img src = "https://authoritynutrition.com/wp-content/uploads/2013/01/fruits.jpg" id = "source" width="300" height="227">
+        </div>
+        <script>
+            let canvas = document.getElementById("canvas");
+            let ctx = canvas.getContext("2d");
+            let image = document.getElementById("source");
+            
+            ctx.drawImage(image, 33,71,104,124,21,20,87,104);
+        </script>
+    </body>
+</html>
+*/
