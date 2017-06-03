@@ -1,4 +1,16 @@
-canvas {
+#canvas {
 	background-color: #f1f1f1;
-    border: black 1px solid;
+    border-bottom: darkgrey 3px solid;
+    border-top: darkgrey 3px solid;
+    border-left: darkgrey 3px solid;
+    
 };
+
+.scoreboard {}
+
+#scoreboard {
+    background-color: darkgrey;
+    border-bottom: darkgrey 3px solid;
+    border-top: darkgrey 4px solid;
+    border-right: darkgrey 3px solid;
+}

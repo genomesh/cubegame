@@ -4,11 +4,11 @@
   "description": "Simple Geometric Game",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.14.0"
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3"
   },
   "devDependencies": {},
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/genomesh/cubegame.git"
