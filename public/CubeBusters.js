@@ -392,7 +392,7 @@ function Corner (xDifAt0,yDifAt0,AngleIfCheck) {
     }
 }
 
-updateObstacleSize = function () {
+function updateObstacleSize () {
     myBody.botCorners = [
         new Corner(Math.cos(Math.PI/10)*-myBody.LengthFromCentre,Math.sin(Math.PI/10)*-myBody.LengthFromCentre),
         new Corner(0,-myBody.LengthFromCentre),
@@ -510,8 +510,18 @@ function displayHighscores () {
     
 }
 
-function levelDown () {if (Level > 0) { Level -= 1; } }
-function levelUp () {if (Level < 9) { Level += 1; } }
+function levelDown () {
+    if (Level > 0) {
+        Level -= 1;
+        spawnObstacleCounter=0;
+    }
+}
+function levelUp () {
+    if (Level < 9) {
+        Level += 1;
+        spawnObstacleCounter=0;
+    }
+}
 
 ScaleHeight = 300;
 ScaleWidth = 500;
