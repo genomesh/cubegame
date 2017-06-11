@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 
 app.set('port', (process.env.PORT || 3000));
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname,'public')));
 
 let highscores = [];
 for (let i = 0;i<10;i++) {
