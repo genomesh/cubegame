@@ -425,6 +425,7 @@ startGame = function () {
     myBody.angle = 0;
     mySword.angle = 0;
     myObstacles = [];
+    playerName = 'Anon';
     spawnObstacleCounter = 0;
     kills = 0;
     GameAreaStopped = false;
@@ -468,11 +469,13 @@ death = function () {
     console.log('Death');
     let myHeaders = new Headers();
     myHeaders.append("Content-Type",'application/json');
+    playerName = document.getElementById('name').value;
+    if (playerName == "") {playerName = 'Anon'}
     let myInit = {
         method:"POST",
         body:JSON.stringify({score:spawnObstacleCounter,
                             level:Level,
-                            name:'Billy'}),
+                            name:playerName}),
         headers: myHeaders
     };
     fetch("/highscore",myInit).then(function (res) {
