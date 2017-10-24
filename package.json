@@ -4,8 +4,8 @@
   "description": "Simple game with cubes",
   "main": "app.js",
   "dependencies": {
-    "body-parser": "^1.17.2",
-    "express": "^4.15.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
     "pg": "^7.3.0"
   },
   "devDependencies": {},
@@ -21,11 +21,8 @@
   "bugs": {
     "url": "https://github.com/genomesh/cubegame/issues"
   },
-  "homepage": "https://github.com/genomesh/cubegame#readme"
+  "homepage": "https://github.com/genomesh/cubegame#readme",
   "engines": {
     "node": "8.6.0"
   }
 }
-
-
-
