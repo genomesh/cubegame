@@ -22,4 +22,10 @@
     "url": "https://github.com/genomesh/cubegame/issues"
   },
   "homepage": "https://github.com/genomesh/cubegame#readme"
+  "engines": {
+    "node": "8.6.0"
+  }
 }
+
+
+
