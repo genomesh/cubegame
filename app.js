@@ -30,8 +30,6 @@ client.query('SELECT * FROM highscores;', (err, res) => {
     fromDB[fromDB.length] = row;
   }
   highscores = createArray(fromDB);
-  client.end();
-  console.log('disconnected');
 });
 
 function createArray (i) {
@@ -79,7 +77,12 @@ app.post('/highscore',function (req, res) {
     }
     highscores[theLevel].length=3;
     if (theScore > highscores[theLevel][2].score) {
-        //send new highscore to DB
+        client.query("UPDATE highscores SET name = '" + highscores[theLevel][0].name + "', score = " + highscores[theLevel][0].score + " WHERE id = 0 AND level = "+theLevel+
+                     ";UPDATE highscores SET name = '" + highscores[theLevel][1].name + "', score = " + highscores[theLevel][1].score + " WHERE id = 1 AND level = "+theLevel+
+                     ";UPDATE highscores SET name = '" + highscores[theLevel][2].name + "', score = " + highscores[theLevel][2].score + " WHERE id = 2 AND level = "+theLevel+";",
+                     (err) => {
+            if (err) throw err;
+        })
     }
     res.setHeader('Content-Type', 'application/json');
     res.json(highscores);

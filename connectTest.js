@@ -6,10 +6,7 @@ const client = new Client({
 })
 
 let fromDB = [];
-
 client.connect();
-console.log('connected');
-
 client.query('SELECT * FROM highscores;', (err, res) => {
   if (err) throw err;
   console.log(res.rows.length);
@@ -18,8 +15,6 @@ client.query('SELECT * FROM highscores;', (err, res) => {
     fromDB[fromDB.length] = row;
   }
   console.log(createArray(fromDB));
-  client.end();
-  console.log('disconnected');
 });
 
 function createArray (i) {
@@ -36,3 +31,11 @@ function createArray (i) {
     }, []);
     return highscores;
 }
+setTimeout(()=>{
+    client.query("UPDATE highscores SET name = 'Poro', score = 200 WHERE id = 2 AND level = 7;", (err,res) => {
+        if (err) throw err;
+        for (let row of res.rows) {
+            console.log(row);
+        }
+    })
+},5000)
