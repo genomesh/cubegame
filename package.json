@@ -1,20 +1,25 @@
 {
   "name": "cubegame",
-  "version": "0.1.0",
-  "description": "Simple Geometric Game",
+  "version": "1.0.0",
+  "description": "Simple game with cubes",
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "pg": "7.3.0"
+    "pg": "^7.3.0"
   },
   "devDependencies": {},
-  "scripts": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/genomesh/cubegame.git"
   },
-  "author": "Dragon",
+  "author": "Genomesh",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/genomesh/cubegame/issues"
+  },
   "homepage": "https://github.com/genomesh/cubegame#readme"
 }
